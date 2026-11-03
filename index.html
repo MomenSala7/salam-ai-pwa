@@ -1,21 +1,24 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b1020">
   <meta name="description" content="Salam AI — Smart Golden Visa Student Assistant">
   <meta name="application-name" content="Salam AI">
-  <title>Salam AI | Golden Visa Student Assistant</title>
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Salam AI">
+  <title>Salam AI</title>
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
-  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
   <style>
     * { box-sizing: border-box; }
     html, body { width: 100%; height: 100%; margin: 0; background: #0b1020; overflow: hidden; }
     main { width: 100%; height: 100%; height: 100dvh; }
     iframe { display: block; width: 100%; height: 100%; border: 0; background: #0b1020; }
-    #offline { display:none; position:fixed; inset:0; padding:2rem; color:#fff; background:#0b1020; font:16px/1.6 system-ui,sans-serif; text-align:center; align-content:center; }
+    #offline { display: none; position: fixed; inset: 0; padding: 2rem; color: #fff; background: #0b1020; font: 16px/1.8 system-ui, sans-serif; text-align: center; align-content: center; }
   </style>
 </head>
 <body>
@@ -34,15 +37,16 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+        navigator.serviceWorker.register('./service-worker.js', { scope: './' })
+          .catch((error) => console.error('Service worker registration failed:', error));
       });
     }
-    window.addEventListener('offline', () => {
-      document.getElementById('offline').style.display = 'grid';
-    });
-    window.addEventListener('online', () => {
-      document.getElementById('offline').style.display = 'none';
-    });
+    function updateNetworkStatus() {
+      document.getElementById('offline').style.display = navigator.onLine ? 'none' : 'grid';
+    }
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
+    updateNetworkStatus();
   </script>
 </body>
 </html>
